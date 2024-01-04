@@ -1,10 +1,15 @@
 import React from 'react';
 import './App.scss';
+import Sidebar from "./components/sidebar/Sidebar"  
+import Home from './components/home/Home';
 
 function App() {
   return (
     <div className="App">
-        <h1>test</h1>
+      {/* sidebar */}
+      <Sidebar />
+      {/* home */}
+      <Home />
     </div>
   );
 }
