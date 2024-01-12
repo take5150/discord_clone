@@ -11,30 +11,14 @@ import { useAppSelector } from '../../app/hooks';
 // firebase/firestore/liteから取得するとエラーとなってしまった
 import { DocumentData, collection, query } from 'firebase/firestore';
 import { onSnapshot  } from 'firebase/firestore'
+import useCollection from '../../hooks/useCollection';
 
-interface Channel {
-  id: string,
-  channel: DocumentData;
-}
 
 const Sidebar = () => {
-  const [channels, setChannels] = useState<Channel[]>([]);
 
   const user = useAppSelector((state)=> state.user);
+  const {documents: channels} = useCollection("Channels")
 
-  const q = query(collection(db, "Channels"));
-  useEffect(() => {
-    onSnapshot(q, (querySnapshot) => {
-      const channelsResults:Channel[] = [];
-      querySnapshot.docs.forEach((doc) => 
-        channelsResults.push({
-          id: doc.id,
-          channel: doc.data(),
-        })
-      );
-      setChannels(channelsResults);
-    });
-  }, [])
 
   return (
     <div>
