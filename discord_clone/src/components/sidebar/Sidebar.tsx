@@ -9,7 +9,7 @@ import SidebarChannel from './SidebarChannel';
 import { auth, db } from '../../firebase';
 import { useAppSelector } from '../../app/hooks';
 // firebase/firestore/liteから取得するとエラーとなってしまった
-import { DocumentData, collection, query } from 'firebase/firestore';
+import { DocumentData, addDoc, collection, query } from 'firebase/firestore';
 import { onSnapshot  } from 'firebase/firestore'
 import useCollection from '../../hooks/useCollection';
 
@@ -18,6 +18,15 @@ const Sidebar = () => {
 
   const user = useAppSelector((state)=> state.user);
   const {documents: channels} = useCollection("Channels")
+
+  const addChannel = async () => {
+    let channelName = prompt("新しいチャンネルを作成します")
+    if (channelName) {
+      await addDoc(collection(db, "Channels"), {
+        channelname: channelName,
+      });
+    }
+  }
 
 
   return (
@@ -45,7 +54,7 @@ const Sidebar = () => {
                 <ExpandMoreIcon />
                 <h4>プログラミングチャンネル</h4>
               </div>
-              <AddIcon className="sidebarAddIcon"/>
+              <AddIcon className="sidebarAddIcon" onClick={() => addChannel()} />
             </div>
             
             <div className="sidebarChannelList">
