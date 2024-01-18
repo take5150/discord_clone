@@ -17,6 +17,5 @@ export const channelSlice = createSlice({
   },
 });
 
-// console.log(channelSlice)
 export const {setChannelInfo} = channelSlice.actions
 export default channelSlice.reducer
