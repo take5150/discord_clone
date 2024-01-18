@@ -8,7 +8,7 @@ import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import GifIcon from '@mui/icons-material/Gif';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import { useAppSelector } from '../../app/hooks';
-import { CollectionReference, DocumentData, Timestamp, addDoc, collection, onSnapshot, serverTimestamp } from 'firebase/firestore';
+import { CollectionReference, DocumentData, Timestamp, addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../firebase';
 
 interface Messages {
@@ -31,7 +31,9 @@ const  Chat = () => {
 
   useEffect(() => {
     let collectionRef = collection(db, "Channels", String(channelId), "messages")
-    onSnapshot(collectionRef, (snapshot) => {
+
+    const CollectionRefOrderBy = query(collectionRef,orderBy("timestamp", "desc"))
+    onSnapshot(CollectionRefOrderBy, (snapshot) => {
       let results: Messages[] = [];
       snapshot.docs.forEach((doc) => {
         results.push({
@@ -61,6 +63,8 @@ const  Chat = () => {
       user: user
     });
 
+    setInputText("")
+
   }
   
   return (
@@ -80,7 +84,7 @@ const  Chat = () => {
       <div className="chatInput">
         <AddCircleOutlineIcon />
         <form action="">
-          <input type="text" placeholder='メッセージを送信' onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputText(e.target.value)}/>
+          <input type="text" placeholder='メッセージを送信' onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputText(e.target.value)} value={inputText}/>
           <button type='submit' className='chatInputButton' onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => sendMessage(e)} >
             送信
           </button>
